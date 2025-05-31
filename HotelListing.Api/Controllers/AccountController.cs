@@ -26,8 +26,7 @@ namespace HotelListing.Api.Controllers
         {
             _logger.LogInformation($"Registration Attempt for {apiUserDto.Email}");
             var errors = await _authManager.Register(apiUserDto);
-            try
-            {
+           
             if (errors.Any())
             {
                 foreach (var error in errors)
@@ -38,15 +37,6 @@ namespace HotelListing.Api.Controllers
                 return BadRequest(ModelState);
             }
             return Ok();
-            } 
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex,$"Registration Attempt for {nameof(Register)}" +
-                                          $" - User Registration attempt for {apiUserDto.Email} ");
-                return Problem($"something went wrong in the {nameof(Register)} please contact support."
-                    , statusCode: 500);
-            }
-
 
         }
 
@@ -62,23 +52,12 @@ namespace HotelListing.Api.Controllers
             _logger.LogInformation($"login attempt for {loginDto.Email} ");
             var authResponse = await _authManager.Login(loginDto);
 
-            try
-            {
-
             if (authResponse == null)
             {
                 return Unauthorized();
             }
 
             return  Ok(authResponse);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation(ex, $"Login Attempt for {nameof(Login)}" +
-                    $" - User Registration attempt for {loginDto.Email} ");
-                return Problem($"something went wrong {nameof(Login)}",statusCode:500);
-            }
-
         }
 
 
